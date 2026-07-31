@@ -1,0 +1,12 @@
+services:
+  pong-arena:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      JWT_SECRET: change-this-secret-before-public-deployment
+      ALLOWED_ORIGIN: "*"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

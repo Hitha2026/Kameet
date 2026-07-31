@@ -1,0 +1,19 @@
+{
+  "name": "Pong Network Arena 2.1",
+  "short_name": "Pong Arena",
+  "description": "لعبة Pong عربية بطوب متناظر، ذكاء اصطناعي، غرف خاصة ومطابقة أونلاين.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#030812",
+  "theme_color": "#071426",
+  "orientation": "landscape-primary",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "scope": "./"
+}

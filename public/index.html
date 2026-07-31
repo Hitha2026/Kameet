@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071426" />
+  <meta name="description" content="Pong Network Arena: طوب متناظر، ذكاء اصطناعي، غرف خاصة ومباريات أونلاين." />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./styles.css" />
+  <title>Pong Network Arena</title>
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main class="app-shell">
+    <header class="topbar glass">
+      <div class="brand">
+        <div class="brand-mark">PN</div>
+        <div>
+          <h1>Pong Network Arena</h1>
+          <p>ذكاء اصطناعي · غرف خاصة · مطابقة عالمية</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="presence-chip" title="حالة الخادم">
+          <span id="connectionDot" class="dot offline"></span>
+          <span id="connectionLabel">وضع محلي</span>
+        </div>
+        <button id="installBtn" class="icon-btn hidden" type="button" title="تثبيت اللعبة">⬇</button>
+        <button id="soundBtn" class="icon-btn" type="button" title="الصوت">🔊</button>
+        <button id="fullscreenBtn" class="icon-btn" type="button" title="ملء الشاشة">⛶</button>
+        <button id="accountBtn" class="account-btn" type="button">
+          <span id="accountAvatar">ز</span>
+          <span id="accountLabel">تسجيل الدخول</span>
+        </button>
+      </div>
+    </header>
+
+    <section id="homeView" class="home-view">
+      <section class="hero glass">
+        <div class="hero-copy">
+          <span class="eyebrow">MULTIPLAYER EDITION 2.1</span>
+          <h2>اختر خصمك وابدأ التحدي</h2>
+          <p>يمكنك اللعب فورًا ضد الذكاء الاصطناعي، أو إنشاء غرفة لصديقك، أو البحث عن لاعب متصل، داخل ملعب بطوب متناظر أعلى وأسفل.</p>
+          <div class="hero-badges">
+            <span>⚡ مزامنة لحظية</span>
+            <span>🛡️ خادم يدير المباراة</span>
+            <span>📱 قابل للتثبيت</span>
+          </div>
+        </div>
+        <div class="network-summary">
+          <div><strong id="onlineCount">0</strong><span>متصل الآن</span></div>
+          <div><strong id="searchingCount">0</strong><span>يبحثون عن مباراة</span></div>
+          <div><strong id="matchesCount">0</strong><span>مباريات نشطة</span></div>
+        </div>
+      </section>
+
+      <section class="mode-grid" aria-label="أنماط اللعب">
+        <article class="mode-card featured">
+          <div class="mode-icon">🤖</div>
+          <span class="mode-tag">بدون تسجيل</span>
+          <h3>ضد الذكاء الاصطناعي</h3>
+          <p>تدريب فردي يعمل محليًا مع أربعة مستويات صعوبة وتدرج في سرعة الكرة.</p>
+          <div class="field compact">
+            <label for="aiDifficulty">مستوى الخصم</label>
+            <select id="aiDifficulty">
+              <option value="easy">سهل</option>
+              <option value="medium" selected>متوسط</option>
+              <option value="hard">صعب</option>
+              <option value="expert">خبير</option>
+            </select>
+          </div>
+          <button id="playAiBtn" class="primary-btn full" type="button">ابدأ ضد الذكاء الاصطناعي</button>
+        </article>
+
+        <article class="mode-card">
+          <div class="mode-icon">🔎</div>
+          <span class="mode-tag online">يتطلب حسابًا</span>
+          <h3>مباراة سريعة</h3>
+          <p>انضم إلى قائمة الانتظار وسيختار الخادم لاعبًا آخر متصلًا تلقائيًا.</p>
+          <ul class="feature-list">
+            <li>خصم عشوائي حقيقي</li>
+            <li>النتيجة محفوظة في الحساب</li>
+            <li>حالة المباراة موحدة بين الجهازين</li>
+          </ul>
+          <button id="quickMatchBtn" class="primary-btn full" type="button">ابحث عن لاعب</button>
+        </article>
+
+        <article class="mode-card">
+          <div class="mode-icon">🔐</div>
+          <span class="mode-tag online">يتطلب حسابًا</span>
+          <h3>غرفة خاصة مع صديق</h3>
+          <p>أنشئ رمزًا من ستة أحرف وأرسله إلى صديقك، أو أدخل الرمز الذي استلمته.</p>
+          <button id="createRoomBtn" class="primary-btn full" type="button">إنشاء غرفة</button>
+          <div class="join-row">
+            <input id="roomCodeInput" type="text" maxlength="6" placeholder="رمز الغرفة" autocomplete="off" />
+            <button id="joinRoomBtn" class="soft-btn" type="button">دخول</button>
+          </div>
+        </article>
+      </section>
+
+      <section class="bottom-grid">
+        <article class="info-card glass">
+          <h3>كيف يعمل اللعب بين جهازين؟</h3>
+          <div class="steps">
+            <div><span>1</span><p>كلا اللاعبين يفتحان نفس رابط اللعبة أو يثبتانها كتطبيق ويب.</p></div>
+            <div><span>2</span><p>ينشئ كل لاعب حسابًا، ثم ينشئ أحدهما غرفة خاصة.</p></div>
+            <div><span>3</span><p>يدخل الصديق الرمز، ويبدأ الخادم مزامنة المباراة لحظيًا.</p></div>
+          </div>
+        </article>
+        <article id="profileCard" class="info-card glass">
+          <h3>ملف اللاعب</h3>
+          <div id="guestProfile" class="guest-profile">
+            <p>سجّل الدخول للاحتفاظ بعدد مرات الفوز والخسارة واللعب أونلاين.</p>
+            <button id="profileLoginBtn" class="soft-btn" type="button">تسجيل أو إنشاء حساب</button>
+          </div>
+          <div id="userProfile" class="profile-stats hidden">
+            <div><strong id="profileWins">0</strong><span>فوز</span></div>
+            <div><strong id="profileLosses">0</strong><span>خسارة</span></div>
+            <div><strong id="profileGames">0</strong><span>مباراة</span></div>
+          </div>
+        </article>
+      </section>
+    </section>
+
+    <section id="gameView" class="game-view hidden">
+      <section class="match-header glass">
+        <div class="player-panel left-player">
+          <span class="side-label">الجانب الأيسر</span>
+          <strong id="leftPlayerName">اللاعب</strong>
+          <span id="leftPlayerStatus">جاهز</span>
+        </div>
+        <div class="score-center">
+          <div class="score"><span id="leftScore">0</span><b>:</b><span id="rightScore">0</span></div>
+          <div id="matchModeLabel" class="match-mode">ضد الذكاء الاصطناعي</div>
+        </div>
+        <div class="player-panel right-player">
+          <span class="side-label">الجانب الأيمن</span>
+          <strong id="rightPlayerName">الذكاء الاصطناعي</strong>
+          <span id="rightPlayerStatus">جاهز</span>
+        </div>
+      </section>
+
+      <section class="metrics-row">
+        <div class="metric"><span>المستوى</span><strong id="levelMetric">1</strong></div>
+        <div class="metric"><span>الطوب المتبقي</span><strong id="bricksMetric">0</strong></div>
+        <div class="metric"><span>نوع المباراة</span><strong id="typeMetric">محلية</strong></div>
+        <div class="metric"><span>حالة الاتصال</span><strong id="latencyMetric">مستقر</strong></div>
+      </section>
+
+      <section class="game-card">
+        <div id="canvasWrap" class="canvas-wrap">
+          <canvas id="gameCanvas" width="960" height="540" aria-label="لوحة لعبة Pong"></canvas>
+          <div id="countdown" class="countdown hidden">3</div>
+          <div class="canvas-topline">
+            <span id="liveStatus"><i class="dot online"></i> المباراة نشطة</span>
+            <span>↑ ↓ أو W S</span>
+          </div>
+        </div>
+        <div class="touch-controls">
+          <button id="upBtn" class="touch-btn" type="button">▲</button>
+          <button id="downBtn" class="touch-btn" type="button">▼</button>
+        </div>
+      </section>
+
+      <div class="game-actions">
+        <button id="leaveGameBtn" class="danger-btn" type="button">إنهاء المباراة</button>
+        <button id="gameFullscreenBtn" class="soft-btn" type="button">ملء الشاشة</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="authModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal-panel auth-panel">
+      <button class="modal-close" data-close="authModal" type="button">×</button>
+      <div class="modal-brand"><div class="brand-mark small">PN</div><div><h2 id="authTitle">حساب اللاعب</h2><p>الحساب مطلوب فقط لأنماط اللعب أونلاين.</p></div></div>
+      <div class="auth-tabs">
+        <button id="loginTab" class="active" type="button">تسجيل الدخول</button>
+        <button id="registerTab" type="button">إنشاء حساب</button>
+      </div>
+      <form id="authForm">
+        <div id="displayNameField" class="field hidden">
+          <label for="displayNameInput">الاسم الظاهر داخل اللعبة</label>
+          <input id="displayNameInput" type="text" maxlength="24" placeholder="مثال: Malath" />
+        </div>
+        <div class="field">
+          <label for="usernameInput">اسم المستخدم</label>
+          <input id="usernameInput" type="text" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" autocomplete="username" required />
+        </div>
+        <div class="field">
+          <label for="passwordInput">كلمة المرور</label>
+          <input id="passwordInput" type="password" minlength="6" maxlength="72" autocomplete="current-password" required />
+        </div>
+        <p id="authError" class="form-error hidden"></p>
+        <button id="authSubmitBtn" class="primary-btn full" type="submit">تسجيل الدخول</button>
+      </form>
+      <p class="privacy-note">تُحفظ كلمة المرور على الخادم بصورة مشفّرة. استخدم اتصال HTTPS عند نشر المشروع.</p>
+    </div>
+  </div>
+
+  <div id="waitingModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-panel waiting-panel">
+      <div class="radar"><span></span><span></span><i>🎮</i></div>
+      <h2 id="waitingTitle">جارٍ البحث عن لاعب...</h2>
+      <p id="waitingText">ابقَ في هذه الصفحة حتى العثور على خصم.</p>
+      <div id="roomCodeBox" class="room-code-box hidden">
+        <span>رمز الغرفة</span>
+        <strong id="roomCodeValue">------</strong>
+        <button id="copyCodeBtn" class="soft-btn" type="button">نسخ الرمز</button>
+      </div>
+      <button id="cancelWaitingBtn" class="danger-btn" type="button">إلغاء</button>
+    </div>
+  </div>
+
+  <div id="resultModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-panel result-panel">
+      <div id="resultIcon" class="result-icon">🏆</div>
+      <h2 id="resultTitle">انتهت المباراة</h2>
+      <p id="resultText">النتيجة النهائية</p>
+      <div class="result-score"><span id="resultLeftScore">0</span><b>:</b><span id="resultRightScore">0</span></div>
+      <div class="result-details">
+        <div><span>المستوى</span><strong id="resultLevel">1</strong></div>
+        <div><span>الطوب المحطم</span><strong id="resultBricks">0</strong></div>
+      </div>
+      <button id="resultHomeBtn" class="primary-btn full" type="button">العودة إلى القائمة</button>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-panel compact-panel">
+      <h2>إنهاء المباراة؟</h2>
+      <p>في اللعب أونلاين سيُحتسب الانسحاب خسارة.</p>
+      <div class="modal-actions">
+        <button id="confirmLeaveBtn" class="danger-btn" type="button">نعم، إنهاء</button>
+        <button class="soft-btn" data-close="confirmModal" type="button">متابعة اللعب</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="./config.js"></script>
+  <script src="./socket-loader.js"></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
